@@ -8,8 +8,6 @@ export default {
   head: [['link', { rel: 'icon', href: '../temp/binfor-icon.png' }]],
   /** 打包项目的根目录 */
   base: '/bxb/',
-  // 打包目录
-  outDir: '../dist',
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     editLink: {
