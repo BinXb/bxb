@@ -9,7 +9,7 @@ export default defineConfig({
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
     editLink:{
-      pattern:"https://binxb.github.io/bxb/:path",
+      pattern:"https://github.com/BinXb/bxb/",
       text:"在github上编辑",
     },
     search: {
