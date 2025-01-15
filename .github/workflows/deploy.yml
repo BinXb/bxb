@@ -1,68 +1,47 @@
-# name名称可以任意取
-name: Bxb的文档笔记
+name: GitHub Actions Build and Deploy
 
 on:
-  # 执行 'push' 到 'master' 时触发，根据自己仓库的分支名修改
-  push:
-    branches: [main]
-
-  # 允许从“操作”选项卡手动运行此工作流
+  # 手动运行工作流程（workflow_dispatch 事件触发器配置后可以在actions下手动运行工作流）
   workflow_dispatch:
 
-# 设置GITHUB_TOKEN的权限
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# 设置属于'pages'组下的工作流并发，设置后只运行首个和最新的工作流，中间等待状态的工作流将被取消
-concurrency:
-  group: pages
-  # 取消首个工作流的运行，这样在并发时就只会运行最新的
-  cancel-in-progress: false
-
 jobs:
-  # 打包流程
-  build:
-    runs-on: ubuntu-latest
+  build-and-deploy:
+    runs-on: ubuntu-latest  #指定服务器的运行环境：最新版本ubuntu
     steps:
-      - name: 检出代码到打包环境中
+      # 使用actions/checkout@v4 库拉取代码到 ubuntu 上
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          # 获取全部提交记录，如果未启用lastUpdated，则不需要
-          fetch-depth: 0
-      - name: 安装PNPM
+          # 根据网上资料查询此处可以设置为 false。https://github.com/actions/checkout
+          persist-credentials: false
+
+      # 安装 pnpm
+      - name: Install pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 8
-      - name: 安装Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: pnpm
-      - name: 启用Github Pages并读取文档元数据
-        uses: actions/configure-pages@v4
-      - name: 安装依赖
-        run: pnpm install
-      - name: 打包
-        run: pnpm build
-      - name: 上传项目
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: docs/.vitepress/dist
 
-  # 部署流程
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    permissions:
-      pages: write
-      id-token: write
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - name: 部署到 GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v2
+      # 设置node的版本
+      - name: Use Node.js
+        # 使用 actions/setup-node@v3 库安装 nodejs，with 提供了一个参数 node-version 表示要安装的 nodejs 版本
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18.x'
+          cache: 'pnpm'
+
+      # 打包成静态文件
+      - name: Build
+        run: pnpm install && pnpm build
+
+      # 部署到GitHub Pages - 也就是将打包内容发布到GitHub Pages
+      - name: Deploy
+        # 使用别人写好的 actions去部署（将打包文件部署到指定分支上）
+        uses: JamesIves/github-pages-deploy-action@v4.3.3
+        # 自定义环境变量
+        with:
+          # 指定仓库：你要发布的仓库路径名
+          repository-name: msyuan/vitePress-project
+          # 部署到 deploy-pages 分支，也就是部署后提交到那个分支
+          branch: deploy-pages
+          # 填写打包好的目录名称路径，本项目配置在根目录
+          folder: dist
