@@ -8,6 +8,10 @@ export default defineConfig({
   head: [['link', { rel: 'icon', href: '../temp/binfor-icon.png' }]],
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
+    editLink:{
+      pattern:"https://binxb.github.io/bxb/:path",
+      text:"在github上编辑",
+    }
     search: {
       provider: 'local', // 开启站内搜索 - 这里的搜索不是根据内容，而是根据标题进行搜索匹配
     },
