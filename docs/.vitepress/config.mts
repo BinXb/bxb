@@ -3,6 +3,10 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "bxb",
+  // 打包目录
+  outDir: "../dist",
+  /** 打包项目的根目录 */
+  base: "/bxb/",
   description: "A VitePress Site",
   lastUpdated: true,
   head: [['link', { rel: 'icon', href: '../temp/binfor-icon.png' }]],
