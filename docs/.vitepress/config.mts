@@ -1,7 +1,7 @@
 import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
-export default defineConfig({
+export default {
   title: "bxb",
   description: "A VitePress Site",
   lastUpdated: true,
@@ -175,4 +175,4 @@ export default defineConfig({
       },
     ]
   }
-})
+}
