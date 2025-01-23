@@ -504,4 +504,38 @@ base64的情况。
 
 有兴趣可以去了解下。
 
-问题三：问题三很简单，写一个类型转换的函数，将base64转成file类型，重新传给`createAndAddNewEditor`方法即可
+问题三：问题三很简单，写一个类型转换的函数，将base64转成file类型，重新传给`createAndAddNewEditor`方法即可.
+
+**最后就是pdfjs的缓存问题**
+
+我使用过很多方法进行清除缓存，但见效都不是很好，最好的方法就是：
+
+1.关闭本地存储。
+
+2.pdf文件路径后手动拼接版本号。
+
+```js
+// viewer.mjs文件
+// 找到这个方法
+async _writeToStorage() {
+    const databaseStr = JSON.stringify(this.database);
+    localStorage.setItem("pdfjs.history", databaseStr);
+  }
+
+  // 将上面本地存储注释掉就行
+```
+
+如果找不到可以尝试通过vscode全局搜索`localStorage`看看哪里进行设置的就注释掉就可以了。
+
+手动赋值版本号
+
+```js
+// 在viewer.mjs文件中找到 run(config)方法
+// 找到代码位置
+ const params = parseQueryString(queryString);
+    file = params.get("file") ?? AppOptions.get("defaultUrl");
+//可以看出来这是读取pdf文件路径的
+// 我们只需要在后面拼接时间戳就行
+file = file.split('?')[0] + '?v=' + new Date().getTime();
+// 这样就可以解决缓存问题 
+```
