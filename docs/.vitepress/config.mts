@@ -111,6 +111,7 @@ export default {
           collapsed: true,
           items: [
             { text: '变量和赋值', link: "/cppDocs/1.start.md" },
+            { text: '函数', link: "/cppDocs/2-function.md" },
           ]
         },
       ]
