@@ -111,12 +111,66 @@ function uploadFileComponents(file, fileKeyName, otherKey) {
   let flag = file.hasOwmProperty("raw");
   if (flag) {
     form.append(fileKeyName, file.raw);
-  }else{
-    return false
+  } else {
+    return false;
   }
   for (const key in otherKey) {
     form.append(key, otherKey[key]);
   }
   return form;
 }
+```
+
+### base64 去背景色
+
+```js
+// * dataimg      base64编码图片
+// * callback      回调函数
+changeImage(dataImg, callback) {
+  let self = this;
+  var base64Img = documencreateElement("base64Img"),
+    canvas = document.createEleme("canvas"),
+    context = canvas.getConte("2d");
+  // 创建新图片
+  var img = new Image();
+  img.src = dataImg;
+  img.addEventListener(
+    "load",
+    function () {
+      // 绘制图片到canvas上
+      canvas.width = img.width;
+      canvas.height = img.height;
+      context.drawImage(img, 0, 0)
+      // 将canvas的透明背景设置色
+      var imageData = contexgetImageData(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+      );
+      for (var i = 0; i imageData.data.length; i +4) {
+        //rgb大于250的透明度y均成0
+        if (
+          imageData.data[i] 250 &&
+          imageData.data[i + 1] 250 &&
+          imageData.data[i + 2] 250
+        ) {
+          imageData.data[i + 3] 0;
+        }
+      }
+      context.putImageDa(imageData, 0, 0);
+      self.baseImg = canvatoDataURL("image/png"); /回base64
+      if (typeof callback !=undefined) {
+        if (callback) callba(self.baseImg);
+      }
+    },
+    false
+  );
+},
+
+// 调用
+
+changeImage(base64Data,(res)=>{
+  console.log('修改后base64数据',res);
+})
 ```
