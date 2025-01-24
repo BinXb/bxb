@@ -1,4 +1,4 @@
-const _theme = {
+const THEME = {
   // https://vitepress.dev/reference/default-theme-config
   editLink: {
     pattern: "https://github.com/BinXb/bxb/",
@@ -165,6 +165,6 @@ const _theme = {
   ]
 }
 
-export default {
-  _theme,
+export {
+  THEME,
 }
