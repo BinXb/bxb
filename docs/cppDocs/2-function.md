@@ -150,4 +150,69 @@ int main()
 }
 ~~~
 
+## 无返回值函数
+
+`void函数`又叫无返回值函数。
+
+当函数声明用`void`进行声明时，此函数没有返回值。
+
+如：
+
+```c++
+
+void printHi(){
+  std::cout<<"Hi"<<'\n';
+  // 无返回值，所以不需要return语句
+}
+int main()
+{
+  printHi();
+  return 0;
+}
+```
+
+### void函数不能在需要值的表达式中使用
+
+如：
+
+```c++
+#include <iostream>
+
+int main()
+{
+    std::cout << 5;
+    std::cout << ;  // 编译失败, 这里需要一个能打印的值
+    return 0;
+}
+```
+
+如
+
+```c++
+#include <iostream>
+
+void printHi()
+{
+    std::cout << "Hi" << '\n';
+}
+
+int main()
+{
+    printHi();
+    std::cout << printHi(); // 编译失败
+    // 这里与上面同理
+    // std::cout << ;
+    return 0;
+}
+```
+
+::: danger
+当使用void函数时，可以进行直接调用。如果要使用void函数的值，将会报错。因为void函数没有返回值。
+
+也就是说，要使用函数的值，这个函数就必须有返回值。
+:::
+
+## 函数参数
+
+
 
