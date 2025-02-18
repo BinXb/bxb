@@ -1,56 +1,50 @@
-name: Bxb的文档笔记
+name: Test
 
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+permissions: {}
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: ${{ github.workflow }}-${{ github.event.number || github.sha }}
+  cancel-in-progress: true
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        node_version: [18, 20, 22]
+        include:
+          - os: windows-latest
+            node_version: 22
+
+    runs-on: ${{ matrix.os }}
+
     steps:
-      - name: 检出代码到打包环境中
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: 安装PNPM
-        uses: pnpm/action-setup@v2
-        with:
-          version: 8
-      - name: 安装Node
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+
+      - name: Set node version to ${{ matrix.node_version }}
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: ${{ matrix.node_version }}
           cache: pnpm
-      - name: 安装依赖
-        run: pnpm install
-      - name: 打包
-        run: pnpm build
-      - name: 检查产物路径
-        run: ls -R docs/.vitepress/dist
-      - name: 上传项目
-        uses: actions/upload-pages-artifact@v2
-        with:
-          path: docs/.vitepress/dist
-          retention-days: 3
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - name: 部署到 GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Install deps
+        run: pnpm install
+        env:
+          PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 1
+
+      - name: Install Playwright
+        run: pnpm playwright install chromium
+
+      - name: Check
+        run: pnpm check
