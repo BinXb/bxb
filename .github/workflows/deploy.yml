@@ -38,7 +38,7 @@ jobs:
       - name: 检查产物路径
         run: ls -R docs/.vitepress/dist
       - name: 上传项目
-        uses: actions/upload-pages-artifact@v3.0.0
+        uses: actions/upload-pages-artifact@v1
         with:
           name: docs
           path: docs/.vitepress/dist
