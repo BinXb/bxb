@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           # 获取全部提交记录，如果未启用lastUpdated，则不需要
           fetch-depth: 0
@@ -49,6 +49,7 @@ jobs:
       - name: 上传项目
         uses: actions/upload-pages-artifact@v3.0.0
         with:
+          name: docs
           path: docs/.vitepress/dist
           retention-days: 3
 
