@@ -1,35 +1,26 @@
-# name名称可以任意取
 name: Bxb的文档笔记
 
 on:
-  # 执行 'push' 到 'master' 时触发，根据自己仓库的分支名修改
   push:
     branches: [main]
-
-  # 允许从“操作”选项卡手动运行此工作流
   workflow_dispatch:
 
-# 设置GITHUB_TOKEN的权限
 permissions:
   contents: read
   pages: write
   id-token: write
 
-# 设置属于'pages'组下的工作流并发，设置后只运行首个和最新的工作流，中间等待状态的工作流将被取消
 concurrency:
   group: pages
-  # 取消首个工作流的运行，这样在并发时就只会运行最新的
   cancel-in-progress: false
 
 jobs:
-  # 打包流程
   build:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
         uses: actions/checkout@v4
         with:
-          # 获取全部提交记录，如果未启用lastUpdated，则不需要
           fetch-depth: 0
       - name: 安装PNPM
         uses: pnpm/action-setup@v2
@@ -53,7 +44,6 @@ jobs:
           path: docs/.vitepress/dist
           retention-days: 3
 
-  # 部署流程
   deploy:
     environment:
       name: github-pages
