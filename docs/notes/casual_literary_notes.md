@@ -539,3 +539,25 @@ async _writeToStorage() {
 file = file.split('?')[0] + '?v=' + new Date().getTime();
 // 这样就可以解决缓存问题 
 ```
+
+pdf关键对象`PDFViewerApplication`
+
+> 调用内部方法入口 - PDFViewerApplication
+```js
+// 通过外部传参自定义调用贴图，将base64图片贴到pdf上
+PDFViewerApplication.pdfViewer.annotationEditorMode = { mode: 13 };
+      PDFViewerApplication.pdfViewer._layerProperties.annotationEditorUIManager.currentLayer.createAndAddNewEditor({
+        offsetX: x,
+        offsetY: y
+      }, true, {
+        bitmapFile: data
+      })
+
+// 通过外部调用保存事件
+PDFViewerApplication.save();
+
+// 修改this指向，到PDFViewerApplication
+function resetThis(type) {
+      const boundFunction = saveblobfn.bind(window.PDFViewerApplication);
+}
+```
