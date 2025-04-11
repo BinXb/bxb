@@ -3,42 +3,40 @@ name: Bxb的文档笔记
 on:
   push:
     branches:
-      - main  # 你希望触发自动部署的分支, 这里是 main
+      - main
   pull_request:
     branches:
-      - main  # 可选，如果你也希望在提交 PR 时触发构建
+      - main
 
 jobs:
-  # 打包流程
   build:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
         uses: actions/checkout@v2
         with:
-          # 获取全部提交记录，如果未启用lastUpdated，则不需要
           fetch-depth: 0
-      - name: 安装pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: '8.0.0'  # 可以指定pnpm版本
+
       - name: 安装Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: pnpm
+          cache: yarn  # 改为 yarn 的缓存
+
       - name: 启用Github Pages并读取文档元数据
         uses: actions/configure-pages@v4
+
       - name: 安装依赖
-        run: pnpm install  # 使用 pnpm 安装依赖
+        run: yarn install  # 改为 yarn 安装
+
       - name: 打包
-        run: pnpm build  # 使用 pnpm 进行构建
+        run: yarn build  # 改为 yarn 构建
+
       - name: 上传项目
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
 
-  # 部署流程
   deploy:
     environment:
       name: github-pages
