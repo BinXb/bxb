@@ -1,44 +1,37 @@
-# 构建 VitePress 站点并将其部署到 GitHub Pages 的示例工作流程
-#
-name: Deploy VitePress site to Pages
+name: Deploy VitePress to GitHub Pages
 
-# 触发条件
 on:
   push:
     branches:
-      - main  # 如果你使用的是 master 分支，则替换为 'master'
+      - main  # 你希望触发自动部署的分支, 这里是 main
+  pull_request:
+    branches:
+      - main  # 可选，如果你也希望在提交 PR 时触发构建
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # 检出代码
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout repository
+      uses: actions/checkout@v2  # 检出代码库
 
-      # 设置 Node.js 环境
-      - name: Set up Node.js
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'  # 使用 Node.js 版本，可以根据需要调整
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16'  # 使用的 Node.js 版本
 
-      # 安装依赖
-      - name: Install dependencies
-        run: |
-          npm install
-          
-      # 构建 VitePress
-      - name: Build VitePress
-        run: |
-          npm run build
+    - name: Install dependencies using Yarn
+      run: |
+        yarn install  # 使用 yarn 安装依赖
 
-      # 部署到 GitHub Pages
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          # 配置构建的目录，一般是 .vitepress/dist 目录
-          folder: .vitepress/dist
-          # GitHub token，用于授权发布
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+    - name: Build the VitePress site
+      run: |
+        yarn build  # 使用 yarn 构建 VitePress 项目
 
+    - name: Deploy to GitHub Pages
+      uses: peaceiris/actions-gh-pages@v3  # 使用 GitHub Pages Action 进行部署
+      with:
+        personal_token: ${{ secrets.GITHUB_TOKEN }}  # 使用 GitHub Token 自动化操作
+        branch: gh-pages  # 部署的目标分支，通常为 gh-pages
+        folder: .vitepress/dist  # VitePress 构建输出的文件夹路径
