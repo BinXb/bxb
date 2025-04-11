@@ -18,21 +18,21 @@ jobs:
         with:
           # 获取全部提交记录，如果未启用lastUpdated，则不需要
           fetch-depth: 0
-      - name: 安装Yarn
-        uses: borales/actions-yarn@v3
+      - name: 安装pnpm
+        uses: pnpm/action-setup@v2
         with:
-          version: '1.22.19'  # 或者指定其他版本的 Yarn
+          version: '8.0.0'  # 可以指定pnpm版本
       - name: 安装Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: yarn
+          cache: pnpm
       - name: 启用Github Pages并读取文档元数据
         uses: actions/configure-pages@v4
       - name: 安装依赖
-        run: yarn install  # 使用 yarn 代替 pnpm
+        run: pnpm install  # 使用 pnpm 安装依赖
       - name: 打包
-        run: yarn build  # 使用 yarn build 代替 pnpm build
+        run: pnpm build  # 使用 pnpm 进行构建
       - name: 上传项目
         uses: actions/upload-pages-artifact@v3
         with:
