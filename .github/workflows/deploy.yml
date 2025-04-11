@@ -12,7 +12,6 @@ jobs:
   # 打包流程
   build:
     runs-on: ubuntu-latest
-    container: node:20
     steps:
       - name: 检出代码到打包环境中
         uses: actions/checkout@v2
