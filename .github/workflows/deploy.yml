@@ -19,7 +19,7 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '16'  # 使用的 Node.js 版本
+        node-version: '20'  # 使用的 Node.js 版本
 
     - name: Install dependencies using Yarn
       run: |
