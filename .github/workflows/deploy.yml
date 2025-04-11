@@ -12,6 +12,7 @@ jobs:
   # 打包流程
   build:
     runs-on: ubuntu-latest
+    container: node:20
     steps:
       - name: 检出代码到打包环境中
         uses: actions/checkout@v2
@@ -34,7 +35,7 @@ jobs:
       - name: 打包
         run: yarn build  # 使用 yarn build 代替 pnpm build
       - name: 上传项目
-        uses: actions/upload-pages-artifact@v2
+        uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
 
