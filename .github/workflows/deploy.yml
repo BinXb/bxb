@@ -7,6 +7,7 @@ on:
   pull_request:
     branches:
       - main
+
 permissions:
   contents: read
   pages: write
@@ -17,7 +18,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4  # 更新到v4版本
         with:
           fetch-depth: 0
 
@@ -25,29 +26,28 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: yarn  # 改为 yarn 的缓存
+          cache: 'yarn'  # 添加引号
 
       - name: 启用Github Pages并读取文档元数据
         uses: actions/configure-pages@v4
 
       - name: 安装依赖
-        run: yarn install  # 改为 yarn 安装
+        run: yarn install --frozen-lockfile  # 添加--frozen-lockfile确保一致性
 
       - name: 打包
-        run: yarn build  # 改为 yarn 构建
+        run: yarn build
 
       - name: 上传项目
-        uses: actions/upload-pages-artifact@v3
+        uses: actions/upload-pages-artifact@v2  # 改为v2版本
         with:
           path: docs/.vitepress/dist
 
   deploy:
+    needs: build
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
     steps:
       - name: 部署到 GitHub Pages
         id: deployment
