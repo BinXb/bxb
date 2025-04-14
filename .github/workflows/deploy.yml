@@ -18,27 +18,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
-        uses: actions/checkout@v4  # 更新到v4版本
-        with:
-          fetch-depth: 0
+        uses: actions/checkout@v4
 
       - name: 安装Node
         uses: actions/setup-node@v3
         with:
           node-version: 20
-          cache: 'yarn'  # 添加引号
+          cache: 'yarn'
 
       - name: 启用Github Pages并读取文档元数据
         uses: actions/configure-pages@v4
 
       - name: 安装依赖
-        run: yarn install --frozen-lockfile  # 添加--frozen-lockfile确保一致性
+        run: yarn install --frozen-lockfile
 
       - name: 打包
         run: yarn build
 
       - name: 上传项目
-        uses: actions/upload-pages-artifact@v2  # 改为v2版本
+        uses: actions/upload-pages-artifact@v2  # 使用正确的action名称
         with:
           path: docs/.vitepress/dist
 
