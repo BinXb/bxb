@@ -19,21 +19,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: 检出代码到打包环境中
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           # 获取全部提交记录，如果未启用lastUpdated，则不需要
           fetch-depth: 0
       - name: 安装pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v3
         with:
           version: '8.0.0'  # 可以指定pnpm版本
       - name: 安装Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: pnpm
-      - name: 启用Github Pages并读取文档元数据
-        uses: actions/configure-pages@v3
       - name: 安装依赖
         run: pnpm install  # 使用 pnpm 安装依赖
       - name: 打包
