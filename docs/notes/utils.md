@@ -174,3 +174,17 @@ changeImage(base64Data,(res)=>{
   console.log('修改后base64数据',res);
 })
 ```
+
+### formData预览数据结构
+
+```js
+const form = new FormData();
+form.append('key1',1111);
+form.append('key2',2222);
+const data = {};
+for (const [key, value] of form.entries()) {
+   data[key] = value;
+}
+console.log(data);
+
+```
