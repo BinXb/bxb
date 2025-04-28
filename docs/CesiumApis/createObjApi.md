@@ -363,3 +363,15 @@ addModel(position,config)
 let model = globalEarth.CreateObj.addModel(position,config)
 
 ```
+
+## 删除静态对象
+
+> > globalEarth.viewer.entities.remove(object);
+> >
+> > globalEarth.viewer.entities.getById(id)
+
+```js
+globalEarth.viewer.entities.remove(
+          globalEarth.viewer.entities.getById(u.uid)
+        );
+```
