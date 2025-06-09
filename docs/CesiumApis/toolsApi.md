@@ -435,13 +435,14 @@ let positions = globalEarth.Tool.CartesiansToAttackArrowPoints(points);
 
 添加事件监听器
 ```js
+var eventHandler = null;
 function addEventListenerClick() {
       // 创建事件处理器
-      const handler = new Cesium.ScreenSpaceEventHandler(
+      eventHandler = new Cesium.ScreenSpaceEventHandler(
         globalEarth.viewer.canvas
       );
       // 监听左键点击事件
-      handler.setInputAction(function (event) {
+      eventHandler.setInputAction(function (event) {
         console.log(event);
         // 获取点击的 Cartesian3 坐标（世界坐标）
         const cartesian = globalEarth.viewer.camera.pickEllipsoid(
@@ -463,14 +464,10 @@ function addEventListenerClick() {
 移除事件监听器
 ```js
 // 移除事件监听器
-    removeEventListenerClick() {
-      const handler = new Cesium.ScreenSpaceEventHandler(
-        globalEarth.viewer.canvas
-      );
-      handler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
-      // 销毁整个事件处理器（释放内存）
-      handler.destroy();
-    },
+eventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_CLICK);
+  // 销毁整个事件处理器（释放内存）
+  eventHandler.destroy();
+},
 ```
 
 
