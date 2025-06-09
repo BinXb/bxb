@@ -402,21 +402,36 @@ let positions = globalEarth.Tool.CartesiansToAttackArrowPoints(points);
 ## 事件监听器
 
 `事件`名称	描述
-LEFT_DOWN	表示鼠标左键按下事件。
-LEFT_UP	表示鼠标左键弹起事件。
-LEFT_CLICK	表示鼠标左键点击事件。
-LEFT_DOUBLE_CLICK	表示鼠标左键双击事件。
-RIGHT_DOWN	表示鼠标右键按下事件。
-RIGHT_UP	表示鼠标右键弹起事件。
-RIGHT_CLICK	表示鼠标右键单击事件。
-MIDDLE_DOWN	表示鼠标中键按下事件。
-MIDDLE_UP	表示鼠标中键弹起事件。
-MIDDLE_CLICK	表示鼠标中键点击事件。
-MOUSE_MOVE	表示鼠标移动事件。
-WHEEL	表示鼠标滚轮滚动事件。
-PINCH_START	表示触控屏上双指开始事件。
-PINCH_END	表示触控屏上双指结束事件。
-PINCH_MOVE	表示触控屏上双指移动事件。
+> LEFT_DOWN	表示鼠标左键按下事件。
+> > 
+> LEFT_UP	表示鼠标左键弹起事件。
+> > 
+> LEFT_CLICK	表示鼠标左键点击事件。
+> 
+> LEFT_DOUBLE_CLICK	表示鼠标左键双击事件。
+> 
+> RIGHT_DOWN	表示鼠标右键按下事件。
+> 
+> RIGHT_UP	表示鼠标右键弹起事件。
+> 
+> RIGHT_CLICK	表示鼠标右键单击事件。
+> 
+> MIDDLE_DOWN	表示鼠标中键按下事件。
+> 
+> MIDDLE_UP	表示鼠标中键弹起事件。
+> 
+> MIDDLE_CLICK	表示鼠标中键点击事件。
+> 
+> MOUSE_MOVE	表示鼠标移动事件。
+> 
+> WHEEL	表示鼠标滚轮滚动事件。
+> 
+> PINCH_START	表示触控屏上双指开始事件。
+> 
+> PINCH_END	表示触控屏上双指结束事件。
+> 
+> PINCH_MOVE	表示触控屏上双指移动事件。
+> 
 
 添加事件监听器
 ```js
