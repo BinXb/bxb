@@ -558,9 +558,10 @@ PDFViewerApplication.save();
 
 // 修改this指向，到PDFViewerApplication
 
-## mapbox图层字体下载地址
-[下载](https://maplibre.org/font-maker/)
 function resetThis(type) {
       const boundFunction = saveblobfn.bind(window.PDFViewerApplication);
 }
 ```
+
+## mapbox图层字体下载地址
+[下载](https://maplibre.org/font-maker/)
