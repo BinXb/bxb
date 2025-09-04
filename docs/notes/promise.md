@@ -137,3 +137,100 @@ export default class EventStreamRequest {
   }
 }
 ```
+
+## 通用文件下载接口
+
+```js
+import axios from 'axios'
+import {
+  getToken,
+  removeToken
+} from '@/utils/auth'
+import {
+  Message
+} from 'element-ui'
+// 请求管理
+const service = axios.create({
+  baseURL: process.env.VUE_APP_BASE_API,
+  // timeout: 60000 //超时时间
+});
+/**
+ * 通用文件下载函数
+ * @param {string} apiPath - 下载接口地址
+ * @param {object} params - 请求参数
+ * @param {object} options - 下载选项
+ * @param {string} options.filename - 文件名，不指定则从响应头获取
+ * @param {string} options.fileType - 文件类型，默认为xlsx
+ * @param {object} options.config - axios配置项
+ * @returns {Promise}
+ */
+export const downloadFile = async (apiPath, params, options = {}) => {
+  try {
+    const {
+      filename,
+      fileType = 'xlsx',
+      config = {}
+    } = options;
+
+    // 获取token
+    const token = getToken();
+
+    // 发送请求
+    const response = await service.post(apiPath, params, {
+      responseType: 'blob',
+      headers: {
+        'Authorization': token ? `Bearer ${token}` : '',
+        ...config.headers
+      },
+      ...config
+    });
+
+    // 处理文件名
+    let downloadName = filename;
+
+    // 如果没有指定文件名，则从响应头获取
+    if (!downloadName) {
+      const contentDisposition = response.headers['content-disposition'];
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        if (fileNameMatch && fileNameMatch[1]) {
+          downloadName = decodeURIComponent(fileNameMatch[1].replace(/['"]/g, ''));
+        }
+      }
+    }
+
+    // 如果仍未获取到文件名，使用默认名称
+    if (!downloadName) {
+      downloadName = `下载文件_${new Date().getTime()}.${fileType}`;
+    }
+
+    // 创建blob对象并下载
+    const blob = new Blob([response.data], {
+      type: response.headers['content-type'] || 'application/octet-stream'
+    });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = downloadName;
+    document.body.appendChild(a);
+    a.click();
+
+    // 清理资源
+    setTimeout(() => {
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, 100);
+
+    return true;
+  } catch (error) {
+    console.error('文件下载失败:', error);
+    Message({
+      message: msg || '文件下载失败',
+      type: 'error',
+      duration: 5 * 1000
+    });
+    // 可以在这里添加全局错误提示
+    throw error; // 抛出错误，方便调用者处理
+  }
+};
+```
