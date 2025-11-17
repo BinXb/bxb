@@ -188,3 +188,48 @@ for (const [key, value] of form.entries()) {
 console.log(data);
 
 ```
+
+### 通过URl下载文件
+
+```js
+/**
+ * 通过 URL 直接下载文件（不预览）
+ * @param {string} fileUrl - 文件远程 URL（如 https://xxx.com/xxx.pdf、https://xxx.com/xxx.jpg）
+ * @param {string} [fileName] - 可选，下载后的文件名（含后缀，如 "报告.pdf"）
+ */
+export function downloadFile(fileUrl, fileName) {
+  // 处理文件名（默认使用 URL 中的原文件名）
+  const defaultFileName = fileUrl.split('/').pop().split('?')[0];
+  const finalFileName = fileName || defaultFileName;
+
+  // 创建隐藏的 <a> 标签
+  const a = document.createElement('a');
+  a.style.display = 'none';
+
+  // 跨域文件处理：通过 fetch 获取 Blob 数据，再创建本地 URL
+  fetch(fileUrl, {
+    method: 'GET',
+    mode: 'cors', // 允许跨域（需服务器配置 CORS 允许该域名访问）
+    credentials: 'omit' // 无需携带 Cookie（根据需求调整为 'include' 或 'same-origin'）
+  })
+    .then(response => {
+      if (!response.ok) throw new Error('文件下载失败');
+      return response.blob(); // 转换为 Blob 二进制数据
+    })
+    .then(blob => {
+      // 创建本地临时 URL（指向 Blob 数据）
+      a.href = URL.createObjectURL(blob);
+      a.download = finalFileName; // 强制下载，指定文件名
+      document.body.appendChild(a);
+      a.click(); // 触发点击下载
+
+      // 清理资源（避免内存泄漏）
+      document.body.removeChild(a);
+      URL.revokeObjectURL(a.href); // 释放临时 URL
+    })
+    .catch(error => {
+      console.error('下载失败：', error);
+      alert('文件下载失败，请稍后重试');
+    });
+}
+```
