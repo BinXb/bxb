@@ -233,3 +233,15 @@ export function downloadFile(fileUrl, fileName) {
     });
 }
 ```
+
+### 校验el-form表单必填
+
+```js
+validateRuleForm(formRef) {
+      return new Promise((resolve) => {
+        formRef.validate(async (valid) => {
+          resolve(valid); // 将验证结果通过 Promise 返回
+        });
+      });
+    },
+```
